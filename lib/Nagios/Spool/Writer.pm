@@ -9,8 +9,7 @@ use version; our $VERSION = qv('0.0.1');
 
 my $TEMPLATE = "cXXXXXX";
 
-has 'spool_dir'           => ( is => 'ro', isa => 'Str', required => 1);
-has 'checkresults_dir'    => ( is => 'ro', isa => 'Str');
+has 'checkresults_dir'    => ( is => 'ro', isa => 'Str', required => 1);
 
 has 'file_time'           => ( is => 'rw', isa => 'Int', default => time );
 has 'host_name'           => ( is => 'rw', isa => 'Str');
@@ -28,11 +27,8 @@ has 'output'              => ( is => 'rw', isa => 'Str');
 
 sub BUILD {
   my $self = shift;
-  my $cd = $self->spool_dir . "/checkresults";
-  unless( -d $cd ) {
-    croak("$cd is not a directory");
-  }
-  $self->{checkresults_dir} = $cd;
+  my $cd = $self->checkresults_dir;
+  croak("$cd is not a directory") unless(-d $cd);
 };
 
 sub get_tempfile {
