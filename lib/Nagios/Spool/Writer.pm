@@ -1,4 +1,4 @@
-package Nagios::Passive::Spool;
+package Nagios::Spool::Writer;
 
 use strict;
 use Moose;

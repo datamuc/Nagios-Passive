@@ -1,7 +1,7 @@
 MANIFEST
 Build.PL
 README
-lib/Nagios/Passive/Spool.pm
+lib/Nagios/Spool/Writer.pm
 t/perlcritic.t
 t/pod-coverage.t
 t/pod.t

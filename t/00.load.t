@@ -1,7 +1,7 @@
 use Test::More tests => 1;
 
 BEGIN {
-use_ok( 'Nagios::Passive::Spool' );
+use_ok( 'Nagios::Spool::Writer' );
 }
 
-diag( "Testing Nagios::Passive::Spool $Nagios::Passive::Spool::VERSION" );
+diag( "Testing Nagios::Spool::Writer $Nagios::Spool::Writer::VERSION" );
