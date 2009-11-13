@@ -4,6 +4,7 @@ use strict;
 use Moose;
 use Carp;
 use File::Temp;
+use Fcntl;
 use version; our $VERSION = qv('0.1');
 
 my $TEMPLATE = "cXXXXXX";
@@ -23,6 +24,7 @@ has 'finish_time' => ( is => 'rw', isa => 'Num', default=>time .".2");
 has 'early_timeout' => ( is => 'rw', isa => 'Int', default=>0);
 has 'exited_ok' => ( is => 'rw', isa => 'Int',default=>1);
 has 'return_code' => ( is => 'rw', isa => 'Int',default=>0);
+has 'output' => ( is => 'rw', isa => 'Str');
 
 sub BUILD {
   my $self = shift;
@@ -39,8 +41,43 @@ sub get_tempfile {
     TEMPLATE => $TEMPLATE,
     DIR => $self->checkresults_dir,
   );
-  $fh->unlink_on_destroy(1);
+  $fh->unlink_on_destroy(0);
+  $self->{fh} = $fh;
   return $fh;
+}
+
+sub touch_file {
+  my $self = shift;
+  my $fh = $self->{fh};
+  my $file = $fh->filename.".ok";
+  sysopen my $t,$file,O_WRONLY|O_CREAT|O_NONBLOCK|O_NOCTTY
+    or croak("Can't create $file : $!");
+  close $t or croak("Can't close $file : $!");
+}
+
+sub write_file {
+  my $self = shift;
+  my $fh = $self->get_tempfile;
+  print $fh "### Active Check Result File ###\n";
+  print $fh 'file_time=',$self->file_time,"\n";
+  print $fh 'file_time=',$self->file_time,"\n";
+  print $fh "\n";
+  print $fh "### Nagios Service Check Result ###\n";
+  print $fh '# Time: ', scalar localtime $self->file_time, "\n";
+  print $fh 'host_name=', $self->host_name, "\n";
+  print $fh 'service_description=', $self->service_description, "\n";
+  print $fh 'check_type=', $self->check_type, "\n";
+  print $fh 'check_options=', $self->check_options, "\n";
+  print $fh 'scheduled_check=', $self->scheduled_check, "\n";
+  print $fh 'latency=', $self->latency, "\n";
+  print $fh 'start_time=', $self->start_time, "\n";
+  print $fh 'finish_time=', $self->finish_time, "\n";
+  print $fh 'early_timeout=', $self->early_timeout, "\n";
+  print $fh 'exited_ok=', $self->exited_ok, "\n";
+  print $fh 'return_code=', $self->return_code, "\n";
+  print $fh 'output=', $self->output, "\n";
+  $self->touch_file;
+  return $fh->filename;
 }
 
 
