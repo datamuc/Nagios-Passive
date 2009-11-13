@@ -5,26 +5,26 @@ use Moose;
 use Carp;
 use File::Temp;
 use Fcntl;
-use version; our $VERSION = qv('0.1');
+use version; our $VERSION = qv('0.0.1');
 
 my $TEMPLATE = "cXXXXXX";
 
-has 'spool_dir' => ( is => 'ro', isa => 'Str', required => 1);
-has 'checkresults_dir' => ( is => 'ro', isa => 'Str');
+has 'spool_dir'           => ( is => 'ro', isa => 'Str', required => 1);
+has 'checkresults_dir'    => ( is => 'ro', isa => 'Str');
 
-has 'file_time' => ( is => 'rw', isa => 'Int', default => time );
-has 'host_name' => ( is => 'rw', isa => 'Str');
+has 'file_time'           => ( is => 'rw', isa => 'Int', default => time );
+has 'host_name'           => ( is => 'rw', isa => 'Str');
 has 'service_description' => ( is => 'rw', isa => 'Str');
-has 'check_type' => ( is => 'rw', isa => 'Int', default => 0);
-has 'check_options' => ( is => 'rw', isa => 'Int', default => 0);
-has 'scheduled_check' => ( is => 'rw', isa => 'Int', default => 0);
-has 'latency' => ( is => 'rw', isa => 'Num', default => 0);
-has 'start_time' => ( is => 'rw', isa => 'Num', default=>(time-1) .".0");
-has 'finish_time' => ( is => 'rw', isa => 'Num', default=>(time-1) .".2");
-has 'early_timeout' => ( is => 'rw', isa => 'Int', default=>0);
-has 'exited_ok' => ( is => 'rw', isa => 'Int',default=>1);
-has 'return_code' => ( is => 'rw', isa => 'Int',default=>0);
-has 'output' => ( is => 'rw', isa => 'Str');
+has 'check_type'          => ( is => 'rw', isa => 'Int', default => 0);
+has 'check_options'       => ( is => 'rw', isa => 'Int', default => 0);
+has 'scheduled_check'     => ( is => 'rw', isa => 'Int', default => 0);
+has 'latency'             => ( is => 'rw', isa => 'Num', default => 0);
+has 'start_time'          => ( is => 'rw', isa => 'Num', default=>(time-1) .".0");
+has 'finish_time'         => ( is => 'rw', isa => 'Num', default=>(time-1) .".2");
+has 'early_timeout'       => ( is => 'rw', isa => 'Int', default=>0);
+has 'exited_ok'           => ( is => 'rw', isa => 'Int', default=>1);
+has 'return_code'         => ( is => 'rw', isa => 'Int', default=>0);
+has 'output'              => ( is => 'rw', isa => 'Str');
 
 sub BUILD {
   my $self = shift;
