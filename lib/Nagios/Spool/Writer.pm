@@ -8,18 +8,24 @@ use Fcntl;
 use version; our $VERSION = qv('0.0.1');
 
 my $TEMPLATE = "cXXXXXX";
+my %RETURN_CODES = (
+  0 => 'OK',
+  1 => 'WARNING',
+  2 => 'ERROR',
+  3 => 'UNKNOWN',
+);
 
 has 'checkresults_dir'    => ( is => 'ro', isa => 'Str', required => 1);
-
-has 'file_time'           => ( is => 'rw', isa => 'Int', default => time );
-has 'host_name'           => ( is => 'rw', isa => 'Str');
+has 'check_name'	  => ( is => 'rw', isa => 'Str', required => 1);
+has 'host_name'           => ( is => 'rw', isa => 'Str', required=>1);
 has 'service_description' => ( is => 'rw', isa => 'Str');
+has 'file_time'           => ( is => 'rw', isa => 'Int', default => time );
 has 'check_type'          => ( is => 'rw', isa => 'Int', default => 0);
 has 'check_options'       => ( is => 'rw', isa => 'Int', default => 0);
 has 'scheduled_check'     => ( is => 'rw', isa => 'Int', default => 0);
 has 'latency'             => ( is => 'rw', isa => 'Num', default => 0);
-has 'start_time'          => ( is => 'rw', isa => 'Num', default=>(time-1) .".0");
-has 'finish_time'         => ( is => 'rw', isa => 'Num', default=>(time-1) .".2");
+has 'start_time'          => ( is => 'rw', isa => 'Num', default=>time . ".0");
+has 'finish_time'         => ( is => 'rw', isa => 'Num', default=>time . ".0");
 has 'early_timeout'       => ( is => 'rw', isa => 'Int', default=>0);
 has 'exited_ok'           => ( is => 'rw', isa => 'Int', default=>1);
 has 'return_code'         => ( is => 'rw', isa => 'Int', default=>0);
@@ -60,7 +66,9 @@ sub write_file {
   print $fh "### Nagios Service Check Result ###\n";
   print $fh '# Time: ', scalar localtime $self->file_time, "\n";
   print $fh 'host_name=', $self->host_name, "\n";
-  print $fh 'service_description=', $self->service_description, "\n";
+  if(defined($self->service_description)) {
+    print $fh 'service_description=', $self->service_description, "\n"
+  }
   print $fh 'check_type=', $self->check_type, "\n";
   print $fh 'check_options=', $self->check_options, "\n";
   print $fh 'scheduled_check=', $self->scheduled_check, "\n";
@@ -70,14 +78,28 @@ sub write_file {
   print $fh 'early_timeout=', $self->early_timeout, "\n";
   print $fh 'exited_ok=', $self->exited_ok, "\n";
   print $fh 'return_code=', $self->return_code, "\n";
-  print $fh 'output=', $self->output, "\n";
+  print $fh 'output=', $self->check_name, " ",
+             $self->_status_code, " - ", $self->_quoted_output, "\n";
   $self->touch_file;
   return $fh->filename;
 }
 
+sub _status_code {
+  my $self = shift;
+  return $RETURN_CODES{$self->return_code} // 'UNKNOWN';
+}
 
+sub _quoted_output {
+  my $self = shift;
+  my $output = $self->output;
+  $output =~ s/\n/\\n/g;
+  return $output;
+}
+
+no Moose;
 1;
 __END__
+Service Check:
 ### Active Check Result File ###
 file_time=1258065708
 
@@ -96,4 +118,23 @@ early_timeout=0
 exited_ok=1
 return_code=3
 output=JMX4PERL UNKNOWN - Cannot fetch performance data\nError while fetching http://localhost:8080/j4p/search/*%3Aj2eeType%3DJ2EEServer%2C* :\n\n500 Can't connect to localhost:8080 (connect: Connection refused)\n=================================================================\n\n
+
+Hostcheck:
+### Active Check Result File ###
+file_time=1258284244
+
+### Nagios Host Check Result ###
+# Time: Sun Nov 15 12:24:04 2009
+host_name=localhost
+check_type=0
+check_options=1
+scheduled_check=1
+reschedule_check=1
+latency=2.602000
+start_time=1258284244.602645
+finish_time=1258284248.617772
+early_timeout=0
+exited_ok=1
+return_code=0
+output=PING OK - Packet loss = 0%, RTA = 0.07 ms|rta=0.070000ms;3000.000000;5000.000000;0.000000 pl=0%;80;100;0\n
 
