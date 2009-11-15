@@ -1,2 +1,49 @@
+Nagios::Spool::Writer v0.0.1
+============================
+
+  Nagios::Spool::Writer can be used to drop check results
+  directly into Nagios' check_result_path.
+
+  Note: This feature of Nagios is currently undocumented. So it
+  may disappear in future versions.
+
+INSTALLATION
+============
+
+  To install this module type the following:
+
+    perl Build.PL
+    perl Build install
+
+DEPENDENCIES
+============
+
+  * File::Temp
+  * Moose
+  * version
+
+SYNOPSIS
+========
+
+  my $nw = Nagios::Spool::Writer->new(
+    checkresults_dir => $checkresultsdir,
+    service_description => $service_description,
+    check_name => $check_name,
+    host_name  => $hostname,
+    return_code => 0, # 1 2 3 
+    output => 'looks (good|bad|horrible) | performancedata'
+  );
+  $nw->write_file;
+
+AUTHOR
+======
+
+Danijel Tašov <dt@korn.shell.la>
+
+LICENSE
+=======
+
+Copyright (C) 2009 by Danijel Tašov
+
 This is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

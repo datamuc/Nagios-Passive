@@ -10,10 +10,10 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Nagios/Spool/Writer.pm',
     dist_abstract       => 'drop check results into nagios\' spool dir',
     requires => {
-        'Nagios::Plugin' => 0,
         'Test::More' => 0,
         'File::Temp' => 0,
         'version'    => 0,
+        'Moose'      => 0,
     },
     add_to_cleanup      => [ 'Nagios-Spool-Writer-*' ],
 );
