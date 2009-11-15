@@ -100,6 +100,112 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 __END__
+
+=head1 NAME
+
+Nagios::Spool::Writer - drop check results into Nagios' check_result_path.
+
+=head1 SYNOPSIS
+
+  my $nw = Nagios::Spool::Writer->new(
+    checkresults_dir => $checkresultsdir,
+    service_description => $service_description,
+    check_name => $check_name,
+    host_name  => $hostname,
+    return_code => 0, # 1 2 3 
+    output => 'looks (good|bad|horrible) | performancedata'
+  );
+  $nw->write_file;
+
+=head1 DESCRIPTION
+
+This module gives you the ability to drop checkresults directly
+into Nagios' check_result_path.
+
+=head1 CONSTRUCTOR
+
+=head2 new( %ARGS )
+
+=over 4
+
+=item checkresults_dir DIRECTORY
+
+The directory where Nagios' configuration option `check_result_path'
+points to.
+
+=item hostname STRING
+
+The hostname on which the check is bound to.
+
+=item service_description STRING
+
+The service description of the check. This is optional, if you
+omit it, the result is treated as a check result for the host
+check of hostname
+
+=item check_name STRING
+
+The name of the check. A nagios check typically returns a line as
+follows:
+
+  CHECKNAME STATUS - MESSAGE | PERFORMANCE_DATA
+
+This method sets the value of CHECKNAME.
+
+=item output STRING
+
+This sets the text after the dash of the nagios output. (see
+check_name). Currently you have to supply performance data to
+this method, for example:
+
+  $nw->output('/nagios fetched in 0.1s | time=0.1;1;5')
+
+=item return_code NUMBER
+
+=over 8
+
+=item 0 - OK
+
+=item 1 - WARNING
+
+=item 2 - CRITICAL
+
+=item 3 - UNKNOWN
+
+=back
+
+This also sets the value of STATUS (see check_name).
+It defaults to `0' if omited.
+
+=back
+
+=head1 METHODS
+
+=head2 write_file
+
+Write the check_result into Nagios' check_result_path.
+
+=head1 LIMITATIONS
+
+This module is in an early stage of development, the API is
+likely to brake in the future.
+
+Also it interacts with an undocumented feature of Nagios. This
+feature may disappear in the future.
+
+=head1 AUTHOR
+
+Danijel Tasov, <dt@korn.shell.la>
+
+=head1 COPYRIGHT
+
+Copyright (C) 2009, Danijel Tasov
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+
 Service Check:
 ### Active Check Result File ###
 file_time=1258065708
