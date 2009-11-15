@@ -29,7 +29,7 @@ has 'finish_time'         => ( is => 'rw', isa => 'Num', default=>time . ".0");
 has 'early_timeout'       => ( is => 'rw', isa => 'Int', default=>0);
 has 'exited_ok'           => ( is => 'rw', isa => 'Int', default=>1);
 has 'return_code'         => ( is => 'rw', isa => 'Int', default=>0);
-has 'output'              => ( is => 'rw', isa => 'Str');
+has 'output'              => ( is => 'rw', isa => 'Str', default=>'no output');
 
 sub BUILD {
   my $self = shift;
@@ -97,6 +97,7 @@ sub _quoted_output {
 }
 
 no Moose;
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 Service Check:
