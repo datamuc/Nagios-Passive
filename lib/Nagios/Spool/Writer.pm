@@ -37,7 +37,7 @@ sub BUILD {
   croak("$cd is not a directory") unless(-d $cd);
 };
 
-sub get_tempfile {
+sub _get_tempfile {
   my $self = shift;
   my $fh = File::Temp->new(
     TEMPLATE => $TEMPLATE,
@@ -48,7 +48,7 @@ sub get_tempfile {
   return $fh;
 }
 
-sub touch_file {
+sub _touch_file {
   my $self = shift;
   my $fh = $self->{fh};
   my $file = $fh->filename.".ok";
@@ -59,7 +59,7 @@ sub touch_file {
 
 sub write_file {
   my $self = shift;
-  my $fh = $self->get_tempfile;
+  my $fh = $self->_get_tempfile;
   print $fh "### Active Check Result File ###\n";
   print $fh 'file_time=',$self->file_time,"\n";
   print $fh "\n";
@@ -80,7 +80,7 @@ sub write_file {
   print $fh 'return_code=', $self->return_code, "\n";
   print $fh 'output=', $self->check_name, " ",
              $self->_status_code, " - ", $self->_quoted_output, "\n";
-  $self->touch_file;
+  $self->_touch_file;
   return $fh->filename;
 }
 
