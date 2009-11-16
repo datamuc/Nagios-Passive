@@ -195,7 +195,7 @@ feature may disappear in the future.
 
 =head1 AUTHOR
 
-Danijel Tasov, <dt@korn.shell.la>
+Danijel Tasov, <data@cpan.org>
 
 =head1 COPYRIGHT
 
