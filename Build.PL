@@ -14,6 +14,7 @@ my $builder = Module::Build->new(
         'File::Temp' => 0,
         'version'    => 0,
         'Moose'      => 0,
+        'Nagios::Plugin' => 0,
     },
     add_to_cleanup      => [ 'Nagios-Spool-Writer-*' ],
 );
