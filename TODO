@@ -1,0 +1,2 @@
+* integrate Nagios::Plugin::Performance
+* integrate Nagios::Plugin::Thresholds
