@@ -11,7 +11,7 @@ my $TEMPLATE = "cXXXXXX";
 my %RETURN_CODES = (
   0 => 'OK',
   1 => 'WARNING',
-  2 => 'ERROR',
+  2 => 'CRITICAL',
   3 => 'UNKNOWN',
 );
 
@@ -86,7 +86,8 @@ sub write_file {
 
 sub _status_code {
   my $self = shift;
-  return $RETURN_CODES{$self->return_code} // 'UNKNOWN';
+  my $r = $RETURN_CODES{$self->return_code};
+  return defined($r) ? $r : 'UNKNOWN';
 }
 
 sub _quoted_output {
