@@ -1,4 +1,4 @@
-Nagios::Spool::Writer v0.0.1
+Nagios::Spool::Writer v0.0.2
 ============================
 
   Nagios::Spool::Writer can be used to drop check results
