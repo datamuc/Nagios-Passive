@@ -5,8 +5,9 @@ use Carp;
 use File::Temp;
 use Fcntl;
 use Nagios::Plugin::Threshold;
+use Nagios::Plugin::Performance;
 Nagios::Plugin::Functions::_use_die(1);
-use version; our $VERSION = qv('0.0.3');
+use version; our $VERSION = qv('0.0.4');
 use Moose;
 
 my $TEMPLATE = "cXXXXXX";
@@ -41,12 +42,29 @@ has 'threshold'           => (
   predicate => 'has_threshold',
   default => sub { Nagios::Plugin::Threshold->new },
 );
+has 'performance' => (
+  traits => ['Array'],
+  is => 'ro',
+  isa => 'ArrayRef[Nagios::Plugin::Performance]',
+  default => sub { [] },
+  lazy => 1,
+  predicate => 'has_performance',
+  handles => {
+     _performance_add => 'push',
+  }
+);
 
 sub BUILD {
   my $self = shift;
   my $cd = $self->checkresults_dir;
   croak("$cd is not a directory") unless(-d $cd);
 };
+
+sub add_perf {
+  my $self = shift;
+  my $perf = Nagios::Plugin::Performance->new(@_);
+  $self->_performance_add($perf);
+}
 
 sub _build_tempfile {
   my $self = shift;
@@ -111,9 +129,19 @@ sub _status_code {
 
 sub _quoted_output {
   my $self = shift;
-  my $output = $self->output;
-  $output =~ s/\n/\\n/g;
-  return $output;
+  my @output = split /\r?\n/, $self->output, -1;
+  if($self->has_performance) {
+     # insert performance data before the end of the first line
+     return join('\n', ($output[0] . " | " . $self->_perf_string),
+                       @output[1..$#output]);
+  }
+  return join('\n', @output);
+}
+
+sub _perf_string {
+  my $self = shift;
+  return "" unless($self->has_performance);
+  return join (" ", map { $_->perfoutput } @{ $self->performance });
 }
 
 no Moose;
@@ -204,7 +232,7 @@ and set_status. (See METHODS).
 
 =head1 METHODS
 
-=head2 set_thresholds
+=head2 set_thresholds HASH
 
 This set's up an Nagios::Plugin::Threshold object.
 
@@ -221,6 +249,19 @@ L<http://nagiosplug.sourceforge.net/developer-guidelines.html#THRESHOLDFORMAT>
 Does value checking of VALUE against the threshold object created with
 C<set_thresholds> and sets C<return_code> accordingly.
 
+=head2 add_perf HASH
+
+  $ns->add_perf(
+     label => 'time',
+     value => '0.1',
+     uom   => 's',
+  );
+
+This adds Performance Data to the object. See
+L<Nagios::Plugin::Performance> on how to use this. Finally the
+performance data is appended to the first line of C<output>. Can
+be called multiple times to add more performance data.
+
 =head2 write_file
 
 Write the check_result into Nagios' check_result_path.
@@ -232,6 +273,12 @@ likely to brake in the future.
 
 Also it interacts with an undocumented feature of Nagios. This
 feature may disappear in the future.
+
+=head1 DEVELOPMENT
+
+Development takes place on github:
+
+L<http://github.com/datamuc/Nagios-Spool-Writer>
 
 =head1 AUTHOR
 

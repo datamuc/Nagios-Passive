@@ -13,8 +13,10 @@ my $builder = Module::Build->new(
         'Test::More' => 0,
         'File::Temp' => 0,
         'version'    => 0,
-        'Moose'      => 0,
+        'Moose'      => '0.92',
         'Nagios::Plugin' => 0,
+         # may be it runs with older versions of perl, but I don't support them
+        'perl'       => '5.8.8',
     },
     add_to_cleanup      => [ 'Nagios-Spool-Writer-*' ],
 );
