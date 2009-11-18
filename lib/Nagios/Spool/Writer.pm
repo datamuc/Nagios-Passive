@@ -7,7 +7,7 @@ use Fcntl;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
 Nagios::Plugin::Functions::_use_die(1);
-use version; our $VERSION = qv('0.0.4');
+use version; our $VERSION = qv('0.1.0');
 use overload '""' => \&to_string;
 use Moose;
 
@@ -300,43 +300,3 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
-
-Service Check:
-### Active Check Result File ###
-file_time=1258065708
-
-### Nagios Service Check Result ###
-# Time: Thu Nov 12 23:41:48 2009
-host_name=localhost
-service_description=GLASSFISH
-check_type=0
-check_options=0
-scheduled_check=1
-reschedule_check=1
-latency=0.043000
-start_time=1258065708.44190
-finish_time=1258065708.271862
-early_timeout=0
-exited_ok=1
-return_code=3
-output=JMX4PERL UNKNOWN - Cannot fetch performance data\nError while fetching http://localhost:8080/j4p/search/*%3Aj2eeType%3DJ2EEServer%2C* :\n\n500 Can't connect to localhost:8080 (connect: Connection refused)\n=================================================================\n\n
-
-Hostcheck:
-### Active Check Result File ###
-file_time=1258284244
-
-### Nagios Host Check Result ###
-# Time: Sun Nov 15 12:24:04 2009
-host_name=localhost
-check_type=0
-check_options=1
-scheduled_check=1
-reschedule_check=1
-latency=2.602000
-start_time=1258284244.602645
-finish_time=1258284248.617772
-early_timeout=0
-exited_ok=1
-return_code=0
-output=PING OK - Packet loss = 0%, RTA = 0.07 ms|rta=0.070000ms;3000.000000;5000.000000;0.000000 pl=0%;80;100;0\n
-
