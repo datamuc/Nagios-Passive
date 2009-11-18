@@ -8,6 +8,7 @@ use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
 Nagios::Plugin::Functions::_use_die(1);
 use version; our $VERSION = qv('0.0.4');
+use overload '""' => \&to_string;
 use Moose;
 
 my $TEMPLATE = "cXXXXXX";
@@ -23,7 +24,7 @@ has 'check_name'	  => ( is => 'rw', isa => 'Str', required => 1);
 has 'host_name'           => ( is => 'rw', isa => 'Str', required=>1);
 has 'service_description' => ( is => 'rw', isa => 'Str');
 has 'file_time'           => ( is => 'rw', isa => 'Int', default => time );
-has 'check_type'          => ( is => 'rw', isa => 'Int', default => 0);
+has 'check_type'          => ( is => 'rw', isa => 'Int', default => 1);
 has 'check_options'       => ( is => 'rw', isa => 'Int', default => 0);
 has 'scheduled_check'     => ( is => 'rw', isa => 'Int', default => 0);
 has 'latency'             => ( is => 'rw', isa => 'Num', default => 0);
@@ -85,29 +86,35 @@ sub _touch_file {
   close $t or croak("Can't close $file : $!");
 }
 
+sub to_string {
+  my $self = shift;
+  my $string = "";
+  $string.="### Active Check Result File ###\n";
+  $string.=sprintf "file_time=%d\n\n",$self->file_time;
+  $string.="### Nagios Service Check Result ###\n";
+  $string.=sprintf "# Time: %s\n",scalar localtime $self->file_time;
+  $string.=sprintf "host_name=%s\n", $self->host_name;
+  if(defined($self->service_description)) {
+    $string.=sprintf "service_description=%s\n", $self->service_description;
+  }
+  $string.=sprintf "check_type=%d\n", $self->check_type;
+  $string.=sprintf "check_options=%d\n", $self->check_options;
+  $string.=sprintf "scheduled_check=%d\n", $self->scheduled_check;
+  $string.=sprintf "latency=%f\n", $self->latency;
+  $string.=sprintf "start_time=%f\n", $self->start_time;
+  $string.=sprintf "finish_time=%f\n", $self->finish_time;
+  $string.=sprintf "early_timeout=%d\n", $self->early_timeout;
+  $string.=sprintf "exited_ok=%d\n", $self->exited_ok;
+  $string.=sprintf "return_code=%d\n", $self->return_code;
+  $string.=sprintf "output=%s %s - %s\n", $self->check_name, 
+             $self->_status_code, $self->_quoted_output;
+  return $string;
+}
+
 sub write_file {
   my $self = shift;
   my $fh = $self->tempfile;
-  print $fh "### Active Check Result File ###\n";
-  print $fh 'file_time=',$self->file_time,"\n";
-  print $fh "\n";
-  print $fh "### Nagios Service Check Result ###\n";
-  print $fh '# Time: ', scalar localtime $self->file_time, "\n";
-  print $fh 'host_name=', $self->host_name, "\n";
-  if(defined($self->service_description)) {
-    print $fh 'service_description=', $self->service_description, "\n"
-  }
-  print $fh 'check_type=', $self->check_type, "\n";
-  print $fh 'check_options=', $self->check_options, "\n";
-  print $fh 'scheduled_check=', $self->scheduled_check, "\n";
-  print $fh 'latency=', $self->latency, "\n";
-  print $fh 'start_time=', $self->start_time, "\n";
-  print $fh 'finish_time=', $self->finish_time, "\n";
-  print $fh 'early_timeout=', $self->early_timeout, "\n";
-  print $fh 'exited_ok=', $self->exited_ok, "\n";
-  print $fh 'return_code=', $self->return_code, "\n";
-  print $fh 'output=', $self->check_name, " ",
-             $self->_status_code, " - ", $self->_quoted_output, "\n";
+  print $fh $self->to_string;
   $self->_touch_file;
   return $fh->filename;
 }
@@ -129,13 +136,14 @@ sub _status_code {
 
 sub _quoted_output {
   my $self = shift;
-  my @output = split /\r?\n/, $self->output, -1;
+  my $output = $self->output;
+  # remove trailing newlines and quote the remaining ones
+  $output =~ s/(?:\r?\n)*$//;
+  $output =~ s/\n/\\n/g;
   if($self->has_performance) {
-     # insert performance data before the end of the first line
-     return join('\n', ($output[0] . " | " . $self->_perf_string),
-                       @output[1..$#output]);
+    return $output . " | ".$self->_perf_string;
   }
-  return join('\n', @output);
+  return $output;
 }
 
 sub _perf_string {
