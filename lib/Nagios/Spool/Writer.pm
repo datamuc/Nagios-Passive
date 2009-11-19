@@ -3,7 +3,7 @@ package Nagios::Spool::Writer;
 use strict;
 use Carp;
 use File::Temp;
-use Fcntl;
+use Fcntl qw/:DEFAULT :flock/;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
 Nagios::Plugin::Functions::_use_die(1);
@@ -34,6 +34,7 @@ has 'early_timeout'       => ( is => 'rw', isa => 'Int', default=>0);
 has 'exited_ok'           => ( is => 'rw', isa => 'Int', default=>1);
 has 'return_code'         => ( is => 'rw', isa => 'Int', default=>0);
 has 'output'              => ( is => 'rw', isa => 'Str', default=>'no output');
+has 'command_file'=>(is => 'ro', isa => 'Str', predicate=>'has_command_file' );
 has 'tempfile' => ( is => 'ro', isa => 'File::Temp', lazy_build => 1);
 has 'threshold'           => (
   is => 'ro',
@@ -144,6 +145,22 @@ sub _quoted_output {
     return $output . " | ".$self->_perf_string;
   }
   return $output;
+}
+
+sub submit {
+  my $s = shift;
+  croak("no external_command_file given") unless $s->has_command_file;
+  my $cf = $s->command_file;
+  open(my $f, ">>", $cf) or croak("cannot open $cf: $!");  
+  flock($f, LOCK_EX);
+  $f->autoflush(1);
+  # PROCESS_SERVICE_CHECK_RESULT;<host_name>;<svc_description>;<return_code>;<plugin_output>
+  my $output = sprintf "[%d] PROCESS_SERVICE_CHECK_RESULT;%s;%s;%d;%s %s - %s\n",
+    $s->file_time, $s->host_name, $s->service_description, $s->return_code,
+    $s->check_name, $s->_status_code, $s->_quoted_output;
+  print $f $output;
+  flock($f, LOCK_UN);
+  close($f) or croak("cannot close $cf");
 }
 
 sub _perf_string {
