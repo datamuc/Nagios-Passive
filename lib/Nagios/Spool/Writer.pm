@@ -211,10 +211,7 @@ This method sets the value of CHECKNAME.
 =item output STRING
 
 This sets the text after the dash of the nagios output. (see
-check_name). Currently you have to supply performance data to
-this method, for example:
-
-  $nw->output('/nagios fetched in 0.1s | time=0.1;1;5')
+check_name).
 
 =item return_code NUMBER
 
@@ -267,7 +264,7 @@ C<set_thresholds> and sets C<return_code> accordingly.
 
 This adds Performance Data to the object. See
 L<Nagios::Plugin::Performance> on how to use this. Finally the
-performance data is appended to the first line of C<output>. Can
+performance data is appended to the end of C<output>. Can
 be called multiple times to add more performance data.
 
 =head2 write_file
