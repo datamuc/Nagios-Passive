@@ -3,6 +3,7 @@ Build.PL
 README
 lib/Nagios/Spool/Writer.pm
 t/00.load.t
+t/10.basic.t
 t/perlcritic.t
 t/pod.t
 META.yml
