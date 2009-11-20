@@ -59,6 +59,10 @@ has 'performance' => (
 sub BUILD {
   my $self = shift;
   my $cd = $self->checkresults_dir;
+  if($self->has_command_file) {
+    my $cf = $self->command_file;
+    croak("$cf is not a named pipe") unless (-p $cf);
+  }
   croak("$cd is not a directory") unless(-d $cd);
 };
 
