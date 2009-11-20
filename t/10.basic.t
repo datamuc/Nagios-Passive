@@ -1,6 +1,11 @@
-use Test::More tests => 20;
+use Test::More;
 
 use Nagios::Spool::Writer;
+if(! -e '/var/tmp' ) {
+  plan skip_all => "you don't have /var/tmp, skipping";
+} else {
+  plan tests => 20;
+}
 
 eval {
   Nagios::Spool::Writer->new(
