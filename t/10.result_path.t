@@ -1,14 +1,9 @@
-use Test::More;
+use Test::More tests => 20;
 
-use Nagios::Spool::Writer;
-if(! -e '/var/tmp' ) {
-  plan skip_all => "you don't have /var/tmp, skipping";
-} else {
-  plan tests => 20;
-}
+use Nagios::Passive;
 
 eval {
-  Nagios::Spool::Writer->new(
+  Nagios::Passive->create(
     checkresults_dir => "/hopefully_not_there",
     check_name => 'x',
     host_name => 'localhost',
@@ -19,15 +14,15 @@ eval {
   fail("constructor");
 }
 
-my $nw = Nagios::Spool::Writer->new(
+my $nw = Nagios::Passive->create(
    checkresults_dir => '/var/tmp',
    check_name => "TEST01",
    host_name  => "localhost",
    service_description => "test_service",
 );
 
-ok(time - $nw->file_time < 5, "time");
-ok(time - $nw->file_time >= 0, "time");
+ok(time - $nw->time < 5, "time");
+ok(time - $nw->time >= 0, "time");
 is($nw->checkresults_dir, "/var/tmp", "checkresults_dir");
 is($nw->check_name, "TEST01", "check_name");
 is($nw->host_name, "localhost", "hostname");
@@ -57,7 +52,7 @@ is($nw->_perf_string, "x=1;; y=5;;", "performance");
 is($nw->_quoted_output, 'no output | x=1;; y=5;;', "output");
 $nw->output("abc\ndef");
 is($nw->_quoted_output, 'abc\ndef | x=1;; y=5;;', "output");
-$nw->file_time(10);
+$nw->time(10);
 $nw->start_time(15);
 $nw->finish_time(20);
 $ENV{TZ} = 'UTC';
