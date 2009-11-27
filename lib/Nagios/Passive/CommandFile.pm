@@ -55,11 +55,11 @@ __END__
 
 =head1 NAME
 
-Nagios::Spool::Writer - drop check results into Nagios' check_result_path.
+Nagios::Passive::CommandFile - drop check results into Nagios' check_result_path.
 
 =head1 SYNOPSIS
 
-  my $nw = Nagios::Spool::Writer->new(
+  my $nw = Nagios::Passive->create(
     command_file => $checkresultsdir,
     service_description => $service_description,
     check_name => $check_name,

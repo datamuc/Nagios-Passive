@@ -2,6 +2,7 @@ package Nagios::Passive;
 use strict;
 use Carp;
 require Class::MOP;
+use version; our $VERSION = qv('0.2');
 
 sub create {
   my $this = shift;

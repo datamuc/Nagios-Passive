@@ -1,8 +1,12 @@
 MANIFEST
 Build.PL
 README
-lib/Nagios/Spool/Writer.pm
+lib/Nagios/Passive.pm
+lib/Nagios/Passive/Base.pm
+lib/Nagios/Passive/CommandFile.pm
+lib/Nagios/Passive/ResultPath.pm
 t/00.load.t
+t/10.basic.t
 t/perlcritic.t
 t/pod.t
 META.yml
