@@ -1,4 +1,6 @@
 package Nagios::Passive;
+use strict;
+use Croak;
 require Class::MOP;
 
 sub create {
@@ -8,9 +10,11 @@ sub create {
   if($opts{command_file}) {
     $class = 'Nagios::Passive::CommandFile';
     Class::MOP::load_class($class);
-  } else {
+  } elsif($opts{checkresults_dir}) {
     $class = 'Nagios::Passive::ResultPath';
     Class::MOP::load_class($class);
+  } else {
+    croak("no backend specified");
   }
   return $class->new(%opts);
 }
@@ -24,7 +28,7 @@ Nagios::Passive - submit passive check results to nagios
 =head1 SYNOPSIS
 
   my $nw = Nagios::Passive->create(
-    checkresults_dir => $checkresultsdir,
+    command_file => $command_file,
     service_description => $service_description,
     check_name => $check_name,
     host_name  => $hostname,
@@ -73,10 +77,11 @@ C<output>.
 
 STATUS can either be set by setting C<return_code> to 0,1,2 or 3
 (See nagios documentation for details) or by using the
-C<set_thresholds> and C<set_status> methods.
+C<set_thresholds> and C<set_status> methods. return_code
+default's to 0 if not set somehow.
 
 C<service_description> is optional, if it's omitted the
-check result belongs to a host check.
+check result belongs to the host check of host_name.
 
 All of the attributes (except the required ones) can also be set
 afterwards, by calling the setter methods of the same name, i.e.:
