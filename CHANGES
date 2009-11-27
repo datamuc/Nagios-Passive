@@ -1,0 +1,17 @@
+v0.2
+----
+   * Name Change: Nagios::Spool::Writer -> Nagios::Passive
+   * 2 Backends available:
+     * Nagios::Passive::ResultPath
+     * Nagios::Passive::CommandFile
+
+     Typically you just use the factory: Nagios::Passive->create
+
+v0.1.1
+------
+   * added a basic test
+   * fixed documentation
+
+v0.1.0
+------
+   * first release
