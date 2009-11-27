@@ -50,6 +50,10 @@ sub to_string {
   croak("override this");
 }
 
+sub submit {
+  croak("override this");
+}
+
 sub add_perf {
   my $self = shift;
   my $perf = Nagios::Plugin::Performance->new(@_);

@@ -1,6 +1,6 @@
 package Nagios::Passive;
 use strict;
-use Croak;
+use Carp;
 require Class::MOP;
 
 sub create {
