@@ -27,7 +27,6 @@ sub to_string {
       $s->time, $s->host_name, $s->service_description, $s->return_code,
       $s->check_name, $s->_status_code, $s->_quoted_output;
   } else {
-    #PROCESS_HOST_CHECK_RESULT;<host_name>;<host_status>;<plugin_output>
     $output = sprintf "[%d] PROCESS_HOST_CHECK_RESULT;%s;%d;%s %s - %s\n",
       $s->time, $s->host_name, $s->return_code,
       $s->check_name, $s->_status_code, $s->_quoted_output;
@@ -42,9 +41,9 @@ sub submit {
   my $output = $s->to_string;
   open(my $f, ">>", $cf) or croak("cannot open $cf: $!");  
   $f->autoflush(1);
-  flock($f, LOCK_EX);
+  flock($f, LOCK_EX) or croak("cannot get lock on $cf: $!");
   print $f $output;
-  flock($f, LOCK_UN);
+  flock($f, LOCK_UN) or croak("cannot unlock $cf: $!");
   close($f) or croak("cannot close $cf");
 }
 
