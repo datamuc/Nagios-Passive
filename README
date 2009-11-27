@@ -1,11 +1,8 @@
-Nagios::Spool::Writer v0.1.0
-============================
+Nagios::Passive v0.2
+====================
 
-  Nagios::Spool::Writer can be used to drop check results
-  directly into Nagios' check_result_path.
-
-  Note: This feature of Nagios is currently undocumented. So it
-  may disappear in future versions.
+  Nagios::Passive can be used to submit passive check results
+  in various ways to nagios.
 
 INSTALLATION
 ============
@@ -26,7 +23,7 @@ DEPENDENCIES
 SYNOPSIS
 ========
 
-  my $nw = Nagios::Spool::Writer->new(
+  my $nw = Nagios::Passive->create(
     checkresults_dir => $checkresultsdir,
     service_description => $service_description,
     check_name => $check_name,
@@ -34,7 +31,7 @@ SYNOPSIS
     return_code => 0, # 1 2 3 
     output => 'looks (good|bad|horrible) | performancedata'
   );
-  $nw->write_file;
+  $nw->submit;
 
 AUTHOR
 ======
