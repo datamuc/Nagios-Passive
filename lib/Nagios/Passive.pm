@@ -14,6 +14,9 @@ sub create {
   } elsif($opts{checkresults_dir}) {
     $class = 'Nagios::Passive::ResultPath';
     Class::MOP::load_class($class);
+  } elsif($opts{socket}) {
+    $class = 'Nagios::Passive::MKLivestatus';
+    Class::MOP::load_class($class);
   } else {
     croak("no backend specified");
   }

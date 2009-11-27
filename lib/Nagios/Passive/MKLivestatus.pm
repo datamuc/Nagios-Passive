@@ -1,34 +1,42 @@
-package Nagios::Passive::CommandFile;
+package Nagios::Passive::MKLivestatus;
 
 use strict;
 use Carp;
 use Fcntl qw/:DEFAULT :flock/;
 use Moose;
+use Nagios::MKLivestatus;
 
 extends 'Nagios::Passive::Base';
 
-has 'command_file'=>(
-  is => 'ro',
+has 'socket'=>(
+  is => 'rw',
   isa => 'Str',
   required => 1,
-  predicate=>'has_command_file'
 );
 
-sub BUILD {
+has '_live' => (
+  is => 'rw',
+  isa => 'Nagios::MKLivestatus',
+  builder => '_build_live',
+  lazy => 1,
+);
+
+sub _build_live {
   my $self = shift;
-  my $cf = $self->command_file;
-  croak("$cf is not a named pipe") unless (-p $cf);
-};
+  my $socket = $self->socket;
+  my $key = -S $socket ? 'socket' : 'server';
+  return Nagios::MKLivestatus->new($key => $socket);
+}
 
 sub to_string {
   my $s = shift;
   my $output;
   if(defined $s->service_description) {
-    $output = sprintf "[%d] PROCESS_SERVICE_CHECK_RESULT;%s;%s;%d;%s %s - %s\n",
+    $output = sprintf "COMMAND [%d] PROCESS_SERVICE_CHECK_RESULT;%s;%s;%d;%s %s - %s",
       $s->time, $s->host_name, $s->service_description, $s->return_code,
       $s->check_name, $s->_status_code, $s->_quoted_output;
   } else {
-    $output = sprintf "[%d] PROCESS_HOST_CHECK_RESULT;%s;%d;%s %s - %s\n",
+    $output = sprintf "COMMAND [%d] PROCESS_HOST_CHECK_RESULT;%s;%d;%s %s - %s",
       $s->time, $s->host_name, $s->return_code,
       $s->check_name, $s->_status_code, $s->_quoted_output;
   }
@@ -37,15 +45,8 @@ sub to_string {
 
 sub submit {
   my $s = shift;
-  croak("no external_command_file given") unless $s->has_command_file;
-  my $cf = $s->command_file;
-  my $output = $s->to_string;
-  open(my $f, ">>", $cf) or croak("cannot open $cf: $!");  
-  $f->autoflush(1);
-  flock($f, LOCK_EX) or croak("cannot get lock on $cf: $!");
-  print $f $output;
-  flock($f, LOCK_UN) or croak("cannot unlock $cf: $!");
-  close($f) or croak("cannot close $cf");
+  my $live = $s->_live;
+  $live->do($s->to_string);
 }
 
 no Moose;

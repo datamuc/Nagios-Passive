@@ -57,7 +57,7 @@ sub submit {
 sub add_perf {
   my $self = shift;
   my $perf = Nagios::Plugin::Performance->new(@_);
-  $self->_performance_add($perf);
+  return $self->_performance_add($perf);
 }
 
 sub set_status {
@@ -66,7 +66,7 @@ sub set_status {
   unless($self->has_threshold) {
     croak("you have to call set_thresholds before calling set_status");
   }
-  $self->return_code($self->threshold->get_status($value))
+  return $self->return_code($self->threshold->get_status($value))
 }
 
 sub _status_code {
