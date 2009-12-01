@@ -24,7 +24,13 @@ has 'service_description' => ( is => 'rw', isa => 'Str');
 has 'time'                => ( is => 'rw', isa => 'Int', default => time );
 has 'return_code'         => ( is => 'rw', isa => 'Int', default => 0);
 has 'output'              => (
-  is => 'rw', isa => 'Str', default => 'no output'
+  is => 'rw',
+  isa => 'Str',
+  traits    => ['String'],
+  default => '',
+  handles => {
+    add_output => 'append',
+  },
 );
 has 'threshold'           => (
   is => 'ro',

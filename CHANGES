@@ -1,3 +1,9 @@
+v0.2.1
+------
+   * provide an add_output method
+     for this reason the default output of 'no output' has changed
+     to ''.
+
 v0.2
 ----
    * Name Change: Nagios::Spool::Writer -> Nagios::Passive

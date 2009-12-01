@@ -2,7 +2,7 @@ package Nagios::Passive;
 use strict;
 use Carp;
 require Class::MOP;
-use version; our $VERSION = qv('0.2');
+use version; our $VERSION = qv('0.2.1');
 
 sub create {
   my $this = shift;
@@ -95,6 +95,16 @@ afterwards, by calling the setter methods of the same name, i.e.:
 
 On the object you gathered from the C<create> method, you can
 perform the following operations.
+
+=head2 output STRING
+
+Sets MESSAGE to STRING
+
+=head2 add_output STRING
+
+Equivalent to:
+
+  $nw->output($nw->output . STRING)
 
 =head2 set_thresholds HASH
 
