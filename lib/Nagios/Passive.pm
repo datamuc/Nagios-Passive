@@ -101,7 +101,8 @@ perform the following operations.
 
 =head2 output STRING
 
-Sets MESSAGE to STRING
+Sets MESSAGE to STRING. If STRING is omitted, it returns
+the current value of output.
 
 =head2 add_output STRING
 
@@ -147,8 +148,8 @@ ResultPath this will drop a file into nagios' check_result_path.
 This module is in an early stage of development, the API is
 likely to brake in the future.
 
-Also it interacts with an undocumented feature of Nagios. This
-feature may disappear in the future.
+Nagios::Passive::ResultPath interacts with an undocumented feature of Nagios.
+This feature may disappear in the future.
 
 =head1 DEVELOPMENT
 
