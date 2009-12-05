@@ -49,7 +49,7 @@ $nw->add_perf( label => 'y', value => 5 );
 ok($nw->has_performance, "performance");
 is(scalar @{ $nw->performance }, 2, "performance");
 is($nw->_perf_string, "x=1;; y=5;;", "performance");
-is($nw->_quoted_output, 'no output | x=1;; y=5;;', "output");
+is($nw->_quoted_output, ' | x=1;; y=5;;', "output");
 $nw->output("abc\n");
 $nw->add_output("def");
 is($nw->_quoted_output, 'abc\ndef | x=1;; y=5;;', "output");
