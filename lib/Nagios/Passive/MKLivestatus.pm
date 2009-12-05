@@ -10,7 +10,6 @@ extends 'Nagios::Passive::Base';
 
 has 'socket'=>(
   is => 'rw',
-  isa => 'Str',
   required => 1,
 );
 
@@ -20,6 +19,18 @@ has '_live' => (
   builder => '_build_live',
   lazy => 1,
 );
+
+around 'BUILDARGS' => sub {
+  my $orig = shift;
+  my $class = shift;
+
+  my $args = ref $_[0] eq 'HASH' ? $_[0] : { @_ };
+  if(ref $args->{socket} eq 'Nagios::MKLivestatus') {
+    $args->{_live} = $args->{socket};
+  }
+
+  return $class->$orig($args);
+};
 
 sub _build_live {
   my $self = shift;

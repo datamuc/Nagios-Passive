@@ -15,6 +15,7 @@ my $builder = Module::Build->new(
         'version'    => 0,
         'Moose'      => '0.92',
         'Nagios::Plugin' => 0,
+        'Nagios::MKLivestatus' => '0.24',
 	'perl'       => '5.8.0',
     },
     add_to_cleanup      => [ 'Nagios-Passive-*' ],
