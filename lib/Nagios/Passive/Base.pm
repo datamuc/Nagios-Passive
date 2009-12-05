@@ -2,7 +2,6 @@ package Nagios::Passive::Base;
 
 use strict;
 use Carp;
-use File::Temp;
 use Fcntl qw/:DEFAULT :flock/;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
