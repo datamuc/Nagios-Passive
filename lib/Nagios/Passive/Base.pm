@@ -2,7 +2,6 @@ package Nagios::Passive::Base;
 
 use strict;
 use Carp;
-use File::Temp;
 use Fcntl qw/:DEFAULT :flock/;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
@@ -85,8 +84,8 @@ sub _quoted_output {
   my $self = shift;
   my $output = $self->output;
   # remove trailing newlines and quote the remaining ones
-  $output =~ s/(?:\r?\n)*$//;
-  $output =~ s/\n/\\n/g;
+  $output =~ s/[\r\n]*$//o;
+  $output =~ s/\n/\\n/go;
   if($self->has_performance) {
     return $output . " | ".$self->_perf_string;
   }

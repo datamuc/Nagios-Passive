@@ -9,6 +9,7 @@ lib/Nagios/Passive/MKLivestatus.pm
 t/00.load.t
 t/10.result_path.t
 t/11.command_file.t
+t/kwalitee.t
 t/perlcritic.t
 t/pod.t
 META.yml
