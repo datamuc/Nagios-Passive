@@ -40,10 +40,8 @@ sub submit {
   my $cf = $s->command_file;
   my $output = $s->to_string;
   open(my $f, ">>", $cf) or croak("cannot open $cf: $!");  
-  $f->autoflush(1);
   flock($f, LOCK_EX) or croak("cannot get lock on $cf: $!");
   print $f $output;
-  flock($f, LOCK_UN) or croak("cannot unlock $cf: $!");
   close($f) or croak("cannot close $cf");
 }
 

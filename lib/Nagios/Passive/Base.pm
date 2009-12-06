@@ -84,8 +84,8 @@ sub _quoted_output {
   my $self = shift;
   my $output = $self->output;
   # remove trailing newlines and quote the remaining ones
-  $output =~ s/(?:\r?\n)*$//;
-  $output =~ s/\n/\\n/g;
+  $output =~ s/[\r\n]*$//o;
+  $output =~ s/\n/\\n/go;
   if($self->has_performance) {
     return $output . " | ".$self->_perf_string;
   }
