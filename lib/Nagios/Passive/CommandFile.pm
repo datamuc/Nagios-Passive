@@ -2,7 +2,6 @@ package Nagios::Passive::CommandFile;
 
 use strict;
 use Carp;
-use Fcntl qw/:DEFAULT :flock/;
 use Moose;
 
 extends 'Nagios::Passive::Base';
@@ -39,10 +38,12 @@ sub submit {
   croak("no external_command_file given") unless $s->has_command_file;
   my $cf = $s->command_file;
   my $output = $s->to_string;
+
+  # I hope this is the correct way to deal with named pipes
+  local $SIG{PIPE} = 'IGNORE';
   open(my $f, ">>", $cf) or croak("cannot open $cf: $!");  
-  flock($f, LOCK_EX) or croak("cannot get lock on $cf: $!");
-  print $f $output;
-  close($f) or croak("cannot close $cf");
+  print $f $output       or croak("cannot write to pipe: $!");
+  close($f)              or croak("cannot close $cf");
 }
 
 no Moose;
