@@ -44,6 +44,7 @@ sub submit {
   open(my $f, ">>", $cf) or croak("cannot open $cf: $!");  
   print $f $output       or croak("cannot write to pipe: $!");
   close($f)              or croak("cannot close $cf");
+  return length($output);
 }
 
 no Moose;

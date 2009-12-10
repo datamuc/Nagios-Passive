@@ -45,6 +45,7 @@ sub _touch_file {
   sysopen my $t,$file,O_WRONLY|O_CREAT|O_NONBLOCK|O_NOCTTY
     or croak("Can't create $file : $!");
   close $t or croak("Can't close $file : $!");
+  return;
 }
 
 sub to_string {
@@ -75,7 +76,9 @@ sub to_string {
 sub submit {
   my $self = shift;
   my $fh = $self->tempfile;
-  print $fh $self->to_string;
+  my $output = $self->to_string;
+  print $fh $output or croak($!);
+  close($fh) or croak($!);
   $self->_touch_file;
   return $fh->filename;
 }
