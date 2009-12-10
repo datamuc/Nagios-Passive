@@ -6,7 +6,6 @@ use Fcntl qw/:DEFAULT :flock/;
 use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
 Nagios::Plugin::Functions::_use_die(1);
-use version; our $VERSION = qv('0.1.0');
 use overload '""' => 'to_string';
 use Moose;
 

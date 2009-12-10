@@ -57,6 +57,10 @@ $nw->time(10);
 $nw->start_time(15);
 $nw->finish_time(20);
 $ENV{TZ} = 'UTC';
+SKIP: {
+if((scalar localtime(10)) ne 'Thu Jan  1 00:00:10 1970') {
+  skip 'localtime does not respect $ENV{TZ}', 1
+}
 is("$nw", << 'EOT', "string");
 ### Active Check Result File ###
 file_time=10
@@ -76,3 +80,4 @@ exited_ok=1
 return_code=2
 output=TEST01 CRITICAL - abc\ndef | x=1;; y=5;;
 EOT
+}

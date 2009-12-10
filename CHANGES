@@ -1,3 +1,9 @@
+v0.2.2
+------
+   * better error handling while writing to pipe
+   * save some CPU cycles
+   * skip some tests where localtime doesn't behave as expected
+
 v0.2.1
 ------
    * provide an add_output method
