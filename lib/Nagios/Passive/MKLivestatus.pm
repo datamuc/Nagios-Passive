@@ -4,7 +4,6 @@ use strict;
 use Carp;
 use Fcntl qw/:DEFAULT :flock/;
 use Moose;
-use Nagios::MKLivestatus;
 
 extends 'Nagios::Passive::Base';
 
@@ -13,10 +12,10 @@ has 'socket'=>(
   required => 1,
 );
 
-has '_live' => (
+has '_socket' => (
   is => 'rw',
-  isa => 'Nagios::MKLivestatus',
-  builder => '_build_live',
+  isa => 'IO::Socket',
+  builder => '_build_socket',
   lazy => 1,
 );
 
@@ -25,18 +24,18 @@ around 'BUILDARGS' => sub {
   my $class = shift;
 
   my $args = ref $_[0] eq 'HASH' ? $_[0] : { @_ };
-  if(ref $args->{socket} eq 'Nagios::MKLivestatus') {
-    $args->{_live} = $args->{socket};
+  if(blessed $args->{socket} and $args->{socket}->isa('IO::Socket')) {
+    $args->{_socket} = $args->{socket};
   }
 
   return $class->$orig($args);
 };
 
-sub _build_live {
+sub _build_socket {
   my $self = shift;
   my $socket = $self->socket;
-  my $key = -S $socket ? 'socket' : 'server';
-  return Nagios::MKLivestatus->new($key => $socket);
+  my $class = 'IO::Socket::'.(-S $socket ? 'UNIX' : 'INET');
+  return $class->new($socket);
 }
 
 sub to_string {
@@ -56,8 +55,8 @@ sub to_string {
 
 sub submit {
   my $s = shift;
-  my $live = $s->_live;
-  $live->do($s->to_string);
+  my $socket = $s->_socket;
+  print $socket $s->to_string."\n" or croak($!);
 }
 
 no Moose;
