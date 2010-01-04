@@ -3,6 +3,12 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new(
+    meta_merge => {
+        resources => {
+            repository => 'http://github.com/datamuc/Nagios-Passive',
+        },
+    },
+
     module_name         => 'Nagios::Passive',
     license             => 'perl',
     dist_author         => 'Danijel Tasov <data@cpan.org>',
@@ -16,7 +22,7 @@ my $builder = Module::Build->new(
         'Moose'      => '0.92',
         'Nagios::Plugin' => 0,
         'Nagios::MKLivestatus' => '0.24',
-	'perl'       => '5.8.0',
+        'perl'       => '5.8.0',
     },
     add_to_cleanup      => [ 'Nagios-Passive-*' ],
 );
