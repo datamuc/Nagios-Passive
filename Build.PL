@@ -15,8 +15,11 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Nagios/Passive.pm',
     dist_abstract       => 'drop check results into nagios\' spool dir',
     create_license      => 1,
-    requires => {
+    build_requires => {
         'Test::More' => 0,
+        'Test::TempDir' => 0,
+    },
+    requires => {
         'File::Temp' => 0,
         'version'    => 0,
         'Moose'      => '0.92',
