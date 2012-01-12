@@ -1,3 +1,4 @@
+#vim: softtabstop-2 sw=2 :
 package Nagios::Passive::Base;
 
 use strict;

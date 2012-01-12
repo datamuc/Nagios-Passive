@@ -8,9 +8,7 @@ use Moose;
 
 extends 'Nagios::Passive::Base';
 
-my $TEMPLATE = "cXXXXXX";
-
-has 'checkresults_dir'    => ( is => 'ro', isa => 'Str', required => 1);
+has 'checkresults_dir'    => ( is => 'ro', isa => 'Str | Undef', required => 1);
 has 'check_type'          => ( is => 'rw', isa => 'Int', default => 1);
 has 'check_options'       => ( is => 'rw', isa => 'Int', default => 0);
 has 'scheduled_check'     => ( is => 'rw', isa => 'Int', default => 0);
@@ -19,34 +17,16 @@ has 'start_time'          => ( is => 'rw', isa => 'Num', default=>time . ".0");
 has 'finish_time'         => ( is => 'rw', isa => 'Num', default=>time . ".0");
 has 'early_timeout'       => ( is => 'rw', isa => 'Int', default=>0);
 has 'exited_ok'           => ( is => 'rw', isa => 'Int', default=>1);
-has 'command_file'=>(is => 'ro', isa => 'Str', predicate=>'has_command_file' );
-has 'tempfile' => ( is => 'ro', isa => 'File::Temp', lazy_build => 1);
+
+with 'Nagios::Passive::Role::Tempfile';
 
 sub BUILD {
   my $self = shift;
   my $cd = $self->checkresults_dir;
-  croak("$cd is not a directory") unless(-d $cd);
+  if(defined $cd and ! -d $cd) {
+    croak("$cd is not a directory")
+  }
 };
-
-sub _build_tempfile {
-  my $self = shift;
-  my $fh = File::Temp->new(
-    TEMPLATE => $TEMPLATE,
-    DIR => $self->checkresults_dir,
-  );
-  $fh->unlink_on_destroy(0);
-  return $fh;
-}
-
-sub _touch_file {
-  my $self = shift;
-  my $fh = $self->tempfile;
-  my $file = $fh->filename.".ok";
-  sysopen my $t,$file,O_WRONLY|O_CREAT|O_NONBLOCK|O_NOCTTY
-    or croak("Can't create $file : $!");
-  close $t or croak("Can't close $file : $!");
-  return;
-}
 
 sub to_string {
   my $self = shift;
@@ -75,6 +55,12 @@ sub to_string {
 
 sub submit {
   my $self = shift;
+  if(! defined $self->checkresults_dir) {
+    croak(
+      "checkresults_dir is not set, you can either set it ".
+      "or use that object with Nagios::Passive::BulkResult"
+    );
+  }
   my $fh = $self->tempfile;
   my $output = $self->to_string;
   print $fh $output or croak($!);
