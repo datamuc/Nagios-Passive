@@ -13,8 +13,8 @@ has 'check_type'          => ( is => 'rw', isa => 'Int', default => 1);
 has 'check_options'       => ( is => 'rw', isa => 'Int', default => 0);
 has 'scheduled_check'     => ( is => 'rw', isa => 'Int', default => 0);
 has 'latency'             => ( is => 'rw', isa => 'Num', default => 0);
-has 'start_time'          => ( is => 'rw', isa => 'Num', default=>time . ".0");
-has 'finish_time'         => ( is => 'rw', isa => 'Num', default=>time . ".0");
+has 'start_time'          => ( is => 'rw', isa => 'Num', default=>sub { time . ".0" });
+has 'finish_time'         => ( is => 'rw', isa => 'Num', default=>sub { time . ".0" });
 has 'early_timeout'       => ( is => 'rw', isa => 'Int', default=>0);
 has 'exited_ok'           => ( is => 'rw', isa => 'Int', default=>1);
 
@@ -28,11 +28,9 @@ sub BUILD {
   }
 };
 
-sub to_string {
+sub _to_string {
   my $self = shift;
   my $string = "";
-  $string.="### Active Check Result File ###\n";
-  $string.=sprintf "file_time=%d\n\n",$self->time;
   $string.="### Nagios Service Check Result ###\n";
   $string.=sprintf "# Time: %s\n",scalar localtime $self->time;
   $string.=sprintf "host_name=%s\n", $self->host_name;
@@ -51,6 +49,14 @@ sub to_string {
   $string.=sprintf "output=%s %s - %s\n", $self->check_name, 
              $self->_status_code, $self->_quoted_output;
   return $string;
+}
+
+sub to_string {
+  my $self = shift;
+  my $string = "";
+  $string.="### Active Check Result File ###\n";
+  $string.=sprintf "file_time=%d\n\n",$self->time;
+  $string.=$self->_to_string;
 }
 
 sub submit {

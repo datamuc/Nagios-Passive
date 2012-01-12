@@ -20,7 +20,7 @@ my %RETURN_CODES = (
 has 'check_name'	  => ( is => 'rw', isa => 'Str', required => 1);
 has 'host_name'           => ( is => 'rw', isa => 'Str', required => 1);
 has 'service_description' => ( is => 'rw', isa => 'Str');
-has 'time'                => ( is => 'rw', isa => 'Int', default => time );
+has 'time'                => ( is => 'rw', isa => 'Int', default => sub { time });
 has 'return_code'         => ( is => 'rw', isa => 'Int', default => 0);
 has 'output'              => (
   is => 'rw',
