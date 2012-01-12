@@ -62,6 +62,9 @@ If there is a key named
 
 =back
 
+If you're using checkresults_dir, you may also wan't to take a look at
+L<Nagios::Passive::BulkResult>.
+
 object ist created.
 
 Other required keys are C<host_name> and C<check_name>.
@@ -147,6 +150,7 @@ likely to brake in the future.
 
 Nagios::Passive::ResultPath interacts with an undocumented feature of Nagios.
 This feature may disappear in the future.
+(Well, that feature works for years now, so ....)
 
 =head1 DEVELOPMENT
 

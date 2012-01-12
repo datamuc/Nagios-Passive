@@ -40,3 +40,41 @@ sub submit {
 
 1;
 __END__
+
+=head1 NAME
+
+Nagios::Passive::BulkResult - submit passive check results to nagios' checkresult_dir in one file
+
+=head1 SYNOPSIS
+
+  my $bulk = Nagios::Passive::BulkResult->new(
+    checkresults_dir => $command_file,
+  );
+  for my $check (@checkresults) {
+    my $nw = Nagios::Passive->create(
+        checkresults_dir => undef, # the checkresults_dir key is required here
+        service_description => $check{service_description},
+        check_name => $check_name,
+        host_name  => $check{hostname},
+        return_code => $check{code},
+        output => 'looks (good|bad|horrible) | performancedata'
+    );
+    $bulk->add($nw);
+  }
+  $bulk->submit;
+
+=head1 DESCRIPTION
+
+Submitting a huge amount of results with L<Nagios::Passive::ResultPath> has some
+limits. Typically a checkresult has a size of 200 bytes or so. But the blocksize
+of most filesystems is about 4K. So a file takes at least 4K of disk space.
+
+Well, disk space is cheap and nagios deletes the file again after it has
+processed it, but most of the time the checkresults_dir is a memory filesystem.
+And suddenly you waste a lot of RAM. Also reading one large file is faster than
+reading thousands of small files.
+
+Nagios can handle multiple check results within one file. This is what this
+Module provides. You just create a Nagios::Passive objects with an undefined
+checkresults_dir and add that object to the BulkResult container. When you
+are done, just call C<-E<gt>submit> on the container and one big file is created.
