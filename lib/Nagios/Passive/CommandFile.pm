@@ -2,7 +2,7 @@ package Nagios::Passive::CommandFile;
 
 use strict;
 use Carp;
-use Moose;
+use Any::Moose;
 
 extends 'Nagios::Passive::Base';
 
@@ -47,7 +47,7 @@ sub submit {
   return length($output);
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 __END__

@@ -8,7 +8,7 @@ use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
 Nagios::Plugin::Functions::_use_die(1);
 use overload '""' => 'to_string';
-use Moose;
+use Any::Moose;
 
 my %RETURN_CODES = (
   0 => 'OK',
@@ -98,7 +98,7 @@ sub _perf_string {
   return join (" ", map { $_->perfoutput } @{ $self->performance });
 }
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 __END__

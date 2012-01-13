@@ -4,7 +4,7 @@ use strict;
 use Carp;
 use File::Temp;
 use Fcntl qw/:DEFAULT :flock/;
-use Moose;
+use Any::Moose;
 
 extends 'Nagios::Passive::Base';
 
@@ -76,7 +76,7 @@ sub submit {
 }
 
 
-no Moose;
+no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 __END__
