@@ -46,7 +46,7 @@ undef $bulk; # flush
 my $file = (glob("$tempdir/*"))[0];
 diag $file;
 my $got = do { local $/; my $f = IO::File->new($file, 'r'); <$f> };
-$got =~ s/\A.*\n\n//s;
+$got =~ s/\A.*?\n\n//s;
 is($got, $expected, "result ok");
 
 done_testing;
@@ -65,6 +65,7 @@ early_timeout=0
 exited_ok=1
 return_code=0
 output=FOO OK - good
+
 ### Nagios Service Check Result ###
 # Time: Thu Jan  1 01:00:10 1970
 host_name=localhost
@@ -78,3 +79,4 @@ early_timeout=0
 exited_ok=1
 return_code=1
 output=FOO WARNING - good
+

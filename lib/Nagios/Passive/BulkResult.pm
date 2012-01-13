@@ -29,7 +29,7 @@ sub submit {
   print $fh sprintf("file_time=%d\n\n",time);
 
   for my $rp (@{ $self->rpobjects }) {
-    my $output = $rp->_to_string;
+    my $output = $rp->_to_string . "\n";
     $fh->print($output) or croak($!);
   }
 
