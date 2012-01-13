@@ -22,7 +22,8 @@ my $builder = Module::Build->new(
     requires => {
         'File::Temp' => 0,
         'version'    => 0,
-        'Moose'      => '0.92',
+        'Any::Moose' => '0',
+        'MouseX::NativeTraits' => 0,
         'Nagios::Plugin' => 0,
         'perl'       => '5.8.0',
     },
