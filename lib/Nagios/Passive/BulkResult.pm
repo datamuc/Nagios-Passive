@@ -1,7 +1,7 @@
 package Nagios::Passive::BulkResult;
+use Any::Moose;
 use IO::File;
 use File::Temp;
-use Any::Moose;
 
 has 'checkresults_dir' => ( is => 'ro', isa => 'Str', required => 1);
 has rpobjects => (
