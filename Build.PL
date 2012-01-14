@@ -22,10 +22,10 @@ my $builder = Module::Build->new(
     requires => {
         'File::Temp'           => 0,
         'version'              => 0,
-        'Any::Moose'           => '0',
+        'Any::Moose'           => 0,
         'MouseX::NativeTraits' => 0,
         'Nagios::Plugin'       => 0,
-        'perl'                 => '5.8.0',
+        'perl'                 => '5.010',
     },
     add_to_cleanup => ['Nagios-Passive-*'],
 );
