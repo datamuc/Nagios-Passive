@@ -2,16 +2,16 @@ package Nagios::Passive;
 use strict;
 use Carp;
 require Class::MOP;
-use version; our $VERSION = qv('0.2.2');
+use version; our $VERSION = qv('0.3.0');
 
 sub create {
   my $this = shift;
   my %opts = ref($_[0]) eq 'HASH' ? %{ $_[0] } : @_;
   my $class;
-  if($opts{command_file}) {
+  if(exists $opts{command_file}) {
     $class = 'Nagios::Passive::CommandFile';
     Class::MOP::load_class($class);
-  } elsif($opts{checkresults_dir}) {
+  } elsif(exists $opts{checkresults_dir}) {
     $class = 'Nagios::Passive::ResultPath';
     Class::MOP::load_class($class);
   } else {
@@ -61,6 +61,9 @@ If there is a key named
 =item * C<command_file>, a Nagios::Passive::CommandFile
 
 =back
+
+If you're using checkresults_dir, you may also wan't to take a look at
+L<Nagios::Passive::BulkResult>.
 
 object ist created.
 
@@ -147,6 +150,7 @@ likely to brake in the future.
 
 Nagios::Passive::ResultPath interacts with an undocumented feature of Nagios.
 This feature may disappear in the future.
+(Well, that feature works for years now, so ....)
 
 =head1 DEVELOPMENT
 
