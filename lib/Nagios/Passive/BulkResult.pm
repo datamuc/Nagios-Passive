@@ -61,15 +61,15 @@ Nagios::Passive::BulkResult - submit passive check results to nagios' checkresul
 =head1 SYNOPSIS
 
   my $bulk = Nagios::Passive::BulkResult->new(
-    checkresults_dir => $command_file,
+    checkresults_dir => '/var/lib/nagios/checkresults',
   );
   for my $check (@checkresults) {
     my $nw = Nagios::Passive->create(
         checkresults_dir => undef, # the checkresults_dir key is required here
-        service_description => $check{service_description},
+        service_description => $check->{service_description},
         check_name => $check_name,
-        host_name  => $check{hostname},
-        return_code => $check{code},
+        host_name  => $check->{hostname},
+        return_code => $check->{code},
         output => 'looks (good|bad|horrible) | performancedata'
     );
     $bulk->add($nw);
