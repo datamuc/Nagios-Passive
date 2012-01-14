@@ -1,7 +1,9 @@
 package Nagios::Passive::BulkResult;
 use Any::Moose;
 use IO::File;
+use Carp qw/croak/;
 use File::Temp;
+use Scalar::Util qw/blessed/;
 
 has 'checkresults_dir' => ( is => 'ro', isa => 'Str', required => 1);
 has rpobjects => (
@@ -9,13 +11,24 @@ has rpobjects => (
   isa => 'ArrayRef[Nagios::Passive::ResultPath]',
   traits => ['Array'],
   default => sub { [] },
-  handles => {
-    add => 'push',
-  },
+# MouseX::NativeTraits is horribly slow currently
+# so I provide my own sub add as a workaround
+#  handles => {
+#    add => 'push',
+#  },
 );
 
 with 'Nagios::Passive::Role::Tempfile';
 
+sub add {
+    my $self = shift;
+    my $error = "type constraint violated, not a Nagios::Passive::ResultPath";
+    for my $x (@_) {
+        croak($error) unless
+            defined blessed($x) and $x->isa('Nagios::Passive::ResultPath');
+    }
+    push @{ $self->rpobjects }, @_;
+}
 
 sub submit {
   my $self = shift;
