@@ -41,7 +41,7 @@ sub submit {
 
   # I hope this is the correct way to deal with named pipes
   local $SIG{PIPE} = 'IGNORE';
-  open(my $f, ">>", $cf) or croak("cannot open $cf: $!");  
+  open(my $f, ">>", $cf) or croak("cannot open $cf: $!");
   print $f $output       or croak("cannot write to pipe: $!");
   close($f)              or croak("cannot close $cf");
   return length($output);
@@ -63,7 +63,7 @@ Nagios::Passive::CommandFile - drop check results into Nagios' check_result_path
     service_description => $service_description,
     check_name => $check_name,
     host_name  => $hostname,
-    return_code => 0, # 1 2 3 
+    return_code => 0, # 1 2 3
     output => 'looks (good|bad|horrible) | performancedata'
   );
   $nw->submit;

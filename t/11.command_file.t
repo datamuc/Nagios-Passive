@@ -21,7 +21,7 @@ eval {
     host_name => 'localhost',
   )
 }; if($@) {
-  ok($@ =~ /is not a named pipe/, "constructor"); 
+  ok($@ =~ /is not a named pipe/, "constructor");
 } else {
   fail("constructor");
 }

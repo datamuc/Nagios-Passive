@@ -33,7 +33,7 @@ Nagios::Passive - submit passive check results to nagios
     service_description => $service_description,
     check_name => $check_name,
     host_name  => $hostname,
-    return_code => 0, # 1 2 3 
+    return_code => 0, # 1 2 3
     output => 'looks (good|bad|horrible) | performancedata'
   );
   $nw->submit;

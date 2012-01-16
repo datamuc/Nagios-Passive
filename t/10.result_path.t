@@ -9,7 +9,7 @@ eval {
     host_name => 'localhost',
   )
 }; if($@) {
-  ok($@ =~ /is not a directory/, "constructor"); 
+  ok($@ =~ /is not a directory/, "constructor");
 } else {
   fail("constructor");
 }

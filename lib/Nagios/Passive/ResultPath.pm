@@ -46,7 +46,7 @@ sub _to_string {
   $string.=sprintf "early_timeout=%d\n", $self->early_timeout;
   $string.=sprintf "exited_ok=%d\n", $self->exited_ok;
   $string.=sprintf "return_code=%d\n", $self->return_code;
-  $string.=sprintf "output=%s %s - %s\n", $self->check_name, 
+  $string.=sprintf "output=%s %s - %s\n", $self->check_name,
              $self->_status_code, $self->_quoted_output;
   return $string;
 }
@@ -92,7 +92,7 @@ Nagios::Passive::ResultPath - drop check results into Nagios' check_result_path.
     service_description => $service_description,
     check_name => $check_name,
     host_name  => $hostname,
-    return_code => 0, # 1 2 3 
+    return_code => 0, # 1 2 3
     output => 'looks (good|bad|horrible) | performancedata'
   );
   $nw->submit
