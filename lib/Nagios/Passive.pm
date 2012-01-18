@@ -1,8 +1,8 @@
 package Nagios::Passive;
 use strict;
 use Carp;
-require Class::MOP;
-use version; our $VERSION = qv('0.3.1');
+use Class::Load qw/load_class/;
+use version; our $VERSION = qv('0.3.3');
 
 sub create {
   my $this = shift;
@@ -10,10 +10,13 @@ sub create {
   my $class;
   if(exists $opts{command_file}) {
     $class = 'Nagios::Passive::CommandFile';
-    Class::MOP::load_class($class);
+    load_class($class);
   } elsif(exists $opts{checkresults_dir}) {
     $class = 'Nagios::Passive::ResultPath';
-    Class::MOP::load_class($class);
+    load_class($class);
+  } elsif(exists $opts{gearman}) {
+    $class = 'Nagios::Passive::Gearman';
+    load_class($class);
   } else {
     croak("no backend specified");
   }
@@ -49,9 +52,6 @@ you supply to the the create method.
 
 =head2 create( %ARGS )
 
-This method returns either a Nagios::Passive::CommandFile or
-a Nagios::Passive::ResultPath object.
-
 If there is a key named
 
 =over 4
@@ -60,12 +60,17 @@ If there is a key named
 
 =item * C<command_file>, a Nagios::Passive::CommandFile
 
+=item * C<gearman>, a Nagios::Passive::Gearman
+
 =back
+
+object ist created.
 
 If you're using checkresults_dir, you may also wan't to take a look at
 L<Nagios::Passive::BulkResult>.
 
-object ist created.
+The gearman constructor also accepts a C<key> for the
+optional shared secret.
 
 Other required keys are C<host_name> and C<check_name>.
 
