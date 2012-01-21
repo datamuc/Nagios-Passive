@@ -1,28 +1,34 @@
+v0.3.3
+    * added gearman backend
+
+v0.3.1 2012-01-14T17:20:42+0100
+    * documentation fixes
+
 v0.3.0 2012-01-13T00:27:11+0100
-   * add Nagios::Passive::BulkResult
-   * switch to Any::Moose
+    * add Nagios::Passive::BulkResult
+    * switch to Any::Moose
 
 v0.2.2
-   * better error handling while writing to pipe
-   * save some CPU cycles
-   * skip some tests where localtime doesn't behave as expected
+    * better error handling while writing to pipe
+    * save some CPU cycles
+    * skip some tests where localtime doesn't behave as expected
 
 v0.2.1
-   * provide an add_output method
-     for this reason the default output of 'no output' has changed
-     to ''.
+    * provide an add_output method
+      for this reason the default output of 'no output' has changed
+      to ''.
 
 v0.2
-   * Name Change: Nagios::Spool::Writer -> Nagios::Passive
-   * 2 Backends available:
-     * Nagios::Passive::ResultPath
-     * Nagios::Passive::CommandFile
+    * Name Change: Nagios::Spool::Writer -> Nagios::Passive
+    * 2 Backends available:
+      * Nagios::Passive::ResultPath
+      * Nagios::Passive::CommandFile
 
-     Typically you just use the factory: Nagios::Passive->create
+      Typically you just use the factory: Nagios::Passive->create
 
 v0.1.1
-   * added a basic test
-   * fixed documentation
+    * added a basic test
+    * fixed documentation
 
 v0.1.0
-   * first release
+    * first release
