@@ -1,7 +1,7 @@
 #!perl
 use Test::More;
 
-plan skip_all => "author test" unless($ENV{TEST_AUTHOR});
+plan skip_all => "author test" unless($ENV{RELEASE_TESTING});
 
 eval 'use Test::Perl::Critic;';
 if($@) {

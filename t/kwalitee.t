@@ -1,11 +1,14 @@
 use Test::More;
 
-plan skip_all => "author test" unless($ENV{TEST_AUTHOR});
+plan skip_all => "author test" unless($ENV{RELEASE_TESTING});
 
 eval {
   require Test::Kwalitee;
   Test::Kwalitee->import(
-    tests => [qw/-has_test_pod_coverage/]
+    tests => [
+        '-has_test_pod_coverage',
+        '-use_strict', # moose imports strict
+    ]
   )
 };
 
