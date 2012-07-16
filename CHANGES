@@ -1,3 +1,6 @@
+v0.3.4 2012-07-17T01:10:54+0200
+    * gearman payload always starts with 'type=' (sni)
+
 v0.3.3 2012-01-21T22:02:52+0100
     * added gearman backend
 

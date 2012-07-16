@@ -13,11 +13,28 @@ my $nw = Nagios::Passive->create(
     host_name => 'localhost',
 );
 
-
+my $ns = Nagios::Passive->create(
+    gearman => Gearman::Client->new,
+    service_description=>'x',
+    key => 'X',
+    check_name => 'x',
+    host_name => 'localhost',
+);
 
 is($nw->to_string, << 'EOE', 'to_string ok');
 type=passive
 host_name=localhost
+start_time=0.0
+finish_time=0.0
+latency=0.0
+return_code=0
+output=x OK - 
+EOE
+
+is($ns->to_string, << 'EOE', 'to_string ok');
+type=passive
+host_name=localhost
+service_description=x
 start_time=0.0
 finish_time=0.0
 latency=0.0

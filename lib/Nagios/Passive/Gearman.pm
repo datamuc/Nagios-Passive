@@ -41,7 +41,9 @@ EOT
     my $result = sprintf $template,
         'passive',
         $self->host_name,
-        (defined $self->service_description ? sprintf "\nservice_description=%s", $self->service_description : '' ),
+        (defined $self->service_description
+            ? sprintf "\nservice_description=%s", $self->service_description
+            : '' ),
         time,0,
         time,0,
         0,0,
