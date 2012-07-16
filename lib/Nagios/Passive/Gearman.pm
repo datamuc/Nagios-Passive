@@ -31,7 +31,7 @@ sub to_string {
     my $self = shift;
     my $template = << 'EOT';
 type=%s
-host_name=%s
+host_name=%s%s
 start_time=%i.%i
 finish_time=%i.%i
 latency=%i.%i
@@ -41,6 +41,7 @@ EOT
     my $result = sprintf $template,
         'passive',
         $self->host_name,
+        (defined $self->service_description ? sprintf "\nservice_description=%s", $self->service_description : '' ),
         time,0,
         time,0,
         0,0,
@@ -48,10 +49,6 @@ EOT
         $self->check_name,
         $self->_status_code,
         $self->_quoted_output;
-    if(defined $self->service_description) {
-        $result = sprintf "service_description=%s\n%s",
-            $self->service_description, $result;
-    }
     return $result;
 }
 
