@@ -3,12 +3,17 @@ use Test::More;
 use Nagios::Passive;
 use Nagios::Passive::BulkResult;
 use IO::File;
+$ENV{TZ} = 'UTC';
 use strict;
 my $tempdir = temp_root;
 
 isnt(eval { Nagios::Passive::BulkResult->new(); 1 }, 1, "should die");
 isnt(eval { Nagios::Passive::BulkResult->new(checkresults_dir => undef); 1 }, 1, "should die");
 
+SKIP: {
+if((scalar localtime(10)) ne 'Thu Jan  1 00:00:10 1970') {
+  skip 'localtime does not respect $ENV{TZ}', 2;
+}
 
 my $p1 = Nagios::Passive->create(
   checkresults_dir => undef,
@@ -48,12 +53,12 @@ diag $file;
 my $got = do { local $/; my $f = IO::File->new($file, 'r'); <$f> };
 $got =~ s/\A.*?\n\n//s;
 is($got, $expected, "result ok");
-
+}
 done_testing;
 
 __DATA__
 ### Nagios Service Check Result ###
-# Time: Thu Jan  1 01:00:10 1970
+# Time: Thu Jan  1 00:00:10 1970
 host_name=localhost
 check_type=1
 check_options=0
@@ -67,7 +72,7 @@ return_code=0
 output=FOO OK - good
 
 ### Nagios Service Check Result ###
-# Time: Thu Jan  1 01:00:10 1970
+# Time: Thu Jan  1 00:00:10 1970
 host_name=localhost
 check_type=1
 check_options=0
