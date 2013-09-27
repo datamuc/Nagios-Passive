@@ -1,3 +1,6 @@
+v0.3.5 2012-12-03T20:46:45+0100
+    * fix test
+
 v0.3.4 2012-07-17T01:10:54+0200
     * gearman payload always starts with 'type=' (sni)
 
