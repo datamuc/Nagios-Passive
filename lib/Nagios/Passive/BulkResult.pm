@@ -80,7 +80,7 @@ Nagios::Passive::BulkResult - submit passive check results to nagios' checkresul
 
 Submitting a huge amount of results with L<Nagios::Passive::ResultPath> has some
 limits. Typically a checkresult has a size of 200 bytes or so. But the blocksize
-of most filesystems is about 4K. So a file takes at least 4K of disk space.
+of most filesystems is about 4K. Therefore a file takes at least 4K of disk space.
 
 Well, disk space is cheap and nagios deletes the file again after it has
 processed it, but most of the time the checkresults_dir is a memory filesystem.
@@ -88,6 +88,6 @@ And suddenly you waste a lot of RAM. Also reading one large file is faster than
 reading thousands of small files.
 
 Nagios can handle multiple check results within one file. This is what this
-Module provides. You just create a Nagios::Passive objects with an undefined
-checkresults_dir and add that object to the BulkResult container. When you
+module provides. You just create Nagios::Passive objects with an undefined
+checkresults_dir and add these to the BulkResult container. When you
 are done, just call C<-E<gt>submit> on the container and one big file is created.
