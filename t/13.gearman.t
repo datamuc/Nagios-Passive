@@ -16,10 +16,12 @@ my $nw = Nagios::Passive->create(
 my $ns = Nagios::Passive->create(
     gearman => Gearman::Client->new,
     service_description=>'x',
-    key => 'X',
+    key => 'X' x 32,
     check_name => 'x',
     host_name => 'localhost',
 );
+
+ok eval { $ns->encrypted_string; 1 }, "encryption doesn't die";
 
 is($nw->to_string, << 'EOE', 'to_string ok');
 type=passive

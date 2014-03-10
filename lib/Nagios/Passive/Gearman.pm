@@ -57,8 +57,10 @@ EOT
 sub encrypted_string {
     my $self = shift;
     my $payload = $self->to_string;
+    my $key = $self->key;
+    $key = substr($key,0,32) . chr(0) x ( 32 - length( $key ) );
     my $crypt = Crypt::Rijndael->new(
-        _null_padding($self->key,32,'e'),
+        $key,
         Crypt::Rijndael::MODE_ECB() # :-(
     );
     $payload = _null_padding($payload,32,'e');
