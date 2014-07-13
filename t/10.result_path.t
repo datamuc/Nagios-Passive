@@ -1,5 +1,7 @@
 use Test::More tests => 20;
 
+plan skip_all => "MSWin32 not supported" if $^O eq 'MSWin32';
+
 use Nagios::Passive;
 
 eval {

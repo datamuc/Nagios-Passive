@@ -5,6 +5,9 @@ use Nagios::Passive::BulkResult;
 use IO::File;
 $ENV{TZ} = 'UTC';
 use strict;
+
+plan skip_all => "MSWin32 not supported" if $^O eq 'MSWin32';
+
 my $tempdir = temp_root;
 
 isnt(eval { Nagios::Passive::BulkResult->new(); 1 }, 1, "should die");
