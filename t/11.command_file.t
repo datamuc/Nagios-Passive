@@ -1,4 +1,5 @@
 use Test::More;
+plan skip_all => "MSWin32 not supported" if $^O eq 'MSWin32';
 
 use Nagios::Passive;
 use POSIX qw/mkfifo/;

@@ -1,5 +1,7 @@
 use Test::More tests => 4;
 
+plan skip_all => "MSWin32 not supported" if $^O eq 'MSWin32';
+
 BEGIN {
 use_ok( 'Nagios::Passive' );
 use_ok( 'Nagios::Passive::ResultPath' );

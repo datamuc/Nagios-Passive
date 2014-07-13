@@ -4,6 +4,8 @@ use Nagios::Passive;
 use Gearman::Client;
 use POSIX qw/mkfifo/;
 
+plan skip_all => "MSWin32 not supported" if $^O eq 'MSWin32';
+
 *CORE::GLOBAL::time = sub { 0 };
 
 my $nw = Nagios::Passive->create(
