@@ -1,6 +1,7 @@
 package Nagios::Passive::Role::Tempfile;
 
-use Any::Moose 'Role';
+use Moo::Role;
+use MooX::late;
 use File::Temp;
 use Fcntl qw/:DEFAULT :flock/;
 

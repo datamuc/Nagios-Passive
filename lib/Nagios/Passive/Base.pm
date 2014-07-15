@@ -8,7 +8,8 @@ use Nagios::Plugin::Threshold;
 use Nagios::Plugin::Performance;
 Nagios::Plugin::Functions::_use_die(1);
 use overload '""' => 'to_string';
-use Any::Moose;
+use Moo;
+use MooX::late;
 
 my %RETURN_CODES = (
   0 => 'OK',
@@ -25,12 +26,17 @@ has 'return_code'         => ( is => 'rw', isa => 'Int', default => 0);
 has 'output'              => (
   is => 'rw',
   isa => 'Str',
-  traits    => ['String'],
+#  traits    => ['String'],
   default => '',
-  handles => {
-    add_output => 'append',
-  },
+#  handles => {
+#    add_output => 'append',
+#  },
 );
+
+sub add_output {
+    $_[0]->output( $_[0]->output . $_[1] );
+}
+
 has 'threshold'           => (
   is => 'ro',
   isa => 'Nagios::Plugin::Threshold',
@@ -98,8 +104,6 @@ sub _perf_string {
   return join (" ", map { $_->perfoutput } @{ $self->performance });
 }
 
-no Any::Moose;
-__PACKAGE__->meta->make_immutable;
 1;
 __END__
 

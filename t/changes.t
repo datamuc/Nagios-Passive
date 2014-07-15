@@ -4,5 +4,5 @@ use Test::More;
 
 (eval 'use Test::CPAN::Changes; 1' and $ENV{RELEASE_TESTING}) or
     plan skip_all => 'author test';
-changes_file_ok("CHANGES");
+changes_file_ok("Changes");
 done_testing;

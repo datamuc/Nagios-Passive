@@ -1,5 +1,6 @@
 package Nagios::Passive::Gearman;
-use Any::Moose;
+use Moo;
+use MooX::late;
 use Gearman::Client;
 use Crypt::Rijndael;
 use MIME::Base64;
