@@ -29,6 +29,8 @@ my $builder = Module::Build->new(
         'Crypt::Rijndael'      => 0,
         'MIME::Base64'         => 0,
         'Gearman::Client'      => 0,
+        'Types::Standard'      => 0,
+        'MooX::HandlesVia'     => 0,
         'perl'                 => '5.010',
     },
     add_to_cleanup => ['Nagios-Passive-*'],
