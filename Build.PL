@@ -17,7 +17,7 @@ my $builder = Module::Build->new(
     configure_requires => { 'Module::Build' => 0.38 },
     build_requires    => {
         'Test::More'    => 0,
-        'Test::TempDir' => 0,
+        'Test::TempDir::Tiny' => 0,
     },
     requires => {
         'File::Temp'           => 0,

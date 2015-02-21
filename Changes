@@ -1,3 +1,7 @@
+v0.4.0
+    * Remove Any::Moose in favor of Moo
+    * Remove Test::TempDir in favor of Test::TempDir::Tiny
+
 v0.3.6 2014-03-10T22:03:40+0100
     * fix key padding (RT #93700)
 
