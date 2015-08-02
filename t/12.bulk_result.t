@@ -1,4 +1,4 @@
-use Test::TempDir;
+use Test::TempDir::Tiny qw/tempdir/;
 use Test::More;
 use Nagios::Passive;
 use Nagios::Passive::BulkResult;
@@ -8,7 +8,7 @@ use strict;
 
 plan skip_all => "MSWin32 not supported" if $^O eq 'MSWin32';
 
-my $tempdir = temp_root;
+my $tempdir = tempdir
 
 isnt(eval { Nagios::Passive::BulkResult->new(); 1 }, 1, "should die");
 isnt(eval { Nagios::Passive::BulkResult->new(checkresults_dir => undef); 1 }, 1, "should die");
