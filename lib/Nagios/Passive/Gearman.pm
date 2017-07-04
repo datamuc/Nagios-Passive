@@ -37,7 +37,7 @@ start_time=%i.%i
 finish_time=%i.%i
 latency=%i.%i
 return_code=%i
-output=%s %s - %s
+output=%s
 EOT
     my $result = sprintf $template,
         'passive',
